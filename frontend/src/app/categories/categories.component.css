@@ -1,0 +1,91 @@
+:host { display: block; }
+
+.categories-section {
+  padding-block: 3rem;
+  background-color: var(--card);
+}
+
+@media (min-width: 768px)  { .categories-section { padding-block: 4rem; } }
+@media (min-width: 1024px) { .categories-section { padding-block: 5rem; } }
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+}
+
+@media (min-width: 768px)  { .section-title { font-size: 1.875rem; } }
+@media (min-width: 1024px) { .section-title { font-size: 2.25rem; } }
+
+.section-subtitle {
+  margin-top: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+/* Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 640px)  { .categories-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px)  { .categories-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) { .categories-grid { grid-template-columns: repeat(5, 1fr); gap: 1.5rem; } }
+
+/* Card */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  background-color: var(--secondary);
+  text-decoration: none;
+  color: var(--foreground);
+  transition: all 0.25s ease;
+}
+
+.category-card:hover {
+  background-color: var(--primary);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--primary) 20%, transparent);
+  transform: translateY(-4px);
+}
+
+.category-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-color: var(--background);
+  color: var(--primary);
+  transition: all 0.25s ease;
+}
+
+.category-card:hover .category-icon-wrap {
+  background-color: var(--primary-foreground);
+  color: var(--primary);
+}
+
+.category-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--foreground);
+  transition: color 0.25s;
+}
+
+@media (min-width: 768px) { .category-name { font-size: 1rem; } }
+
+.category-card:hover .category-name {
+  color: var(--primary-foreground);
+}

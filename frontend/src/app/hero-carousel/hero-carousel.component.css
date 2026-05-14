@@ -1,0 +1,196 @@
+:host { display: block; }
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) { .hero { height: 600px; } }
+@media (min-width: 1024px) { .hero { height: 700px; } }
+
+/* Slides */
+.slide {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.slide.active  { opacity: 1; transform: scale(1); }
+.slide.inactive { opacity: 0; transform: scale(1.05); pointer-events: none; }
+
+.slide-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.slide-overlay-bottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--background) 0%, color-mix(in srgb, var(--background) 60%, transparent) 50%, transparent 100%);
+}
+
+.slide-overlay-sides {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, color-mix(in srgb, var(--background) 80%, transparent), transparent, color-mix(in srgb, var(--background) 80%, transparent));
+}
+
+/* Content */
+.slide-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1rem;
+  text-align: center;
+}
+
+.slide-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  text-wrap: balance;
+}
+
+@media (min-width: 768px)  { .slide-title { font-size: 3rem; } }
+@media (min-width: 1024px) { .slide-title { font-size: 3.75rem; } }
+
+.slide-desc {
+  max-width: 42rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  text-wrap: pretty;
+}
+
+@media (min-width: 768px)  { .slide-desc { font-size: 1.125rem; } }
+@media (min-width: 1024px) { .slide-desc { font-size: 1.25rem; } }
+
+/* Category tag */
+.slide-category-tag {
+  display: inline-block;
+  padding: 0.25rem 0.875rem;
+  border-radius: 9999px;
+  background-color: color-mix(in srgb, var(--primary) 20%, transparent);
+  color: var(--primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+/* Price row */
+.slide-price-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.slide-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+@media (min-width: 768px) { .slide-price { font-size: 2.5rem; } }
+
+.slide-price-old {
+  font-size: 1.25rem;
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+}
+
+.slide-badge-tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Loading */
+.slide-loading {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--muted) 100%);
+}
+
+.btn-buy {
+  font-size: 1.125rem;
+  font-weight: 700;
+  padding: 0.875rem 2.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--primary) 25%, transparent);
+  transition: all 0.3s ease;
+}
+.btn-buy:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+/* Arrows */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--secondary) 80%, transparent);
+  color: var(--foreground);
+  border: none;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.arrow:hover {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow-left  { left: 1rem; }
+.arrow-right { right: 1rem; }
+
+/* Dots */
+.dots {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.dot {
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 9999px;
+  border: none;
+  background-color: var(--secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot:hover { background-color: var(--muted-foreground); }
+
+.dot-active {
+  width: 2rem;
+  background-color: var(--primary);
+}

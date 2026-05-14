@@ -1,0 +1,100 @@
+import { Injectable, signal } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  perfil?: {
+    rol: string;
+    telefono: string;
+    direccion: string;
+    ciudad: string;
+    avatar: string | null;
+  };
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
+}
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private API_URL = 'http://localhost:8000/api/usuarios/';
+  user = signal<User | null>(null);
+  token = signal<string | null>(localStorage.getItem('token'));
+
+  constructor(private http: HttpClient) {
+    if (this.token()) {
+      this.cargarUsuario();
+    }
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': `Token ${this.token()}`
+    });
+  }
+
+  register(data: any): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_URL}register/`, data).pipe(
+      tap((response: AuthResponse) => {
+        localStorage.setItem('token', response.token);
+        this.token.set(response.token);
+        this.user.set(response.user);
+      })
+    );
+  }
+
+  login(username: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_URL}login/`, { username, password }).pipe(
+      tap((response: AuthResponse) => {
+        localStorage.setItem('token', response.token);
+        this.token.set(response.token);
+        this.user.set(response.user);
+      })
+    );
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.token.set(null);
+    this.user.set(null);
+  }
+
+  updateProfile(data: any): Observable<User> {
+    return this.http.put<User>(`${this.API_URL}perfil/`, data, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap((updatedUser) => {
+        this.user.set(updatedUser);
+      })
+    );
+  }
+
+  private cargarUsuario() {
+    if (this.token()) {
+      this.http.get<User>(`${this.API_URL}perfil/`, {
+        headers: this.getAuthHeaders()
+      }).subscribe({
+        next: (user) => this.user.set(user),
+        error: () => {
+          localStorage.removeItem('token');
+          this.token.set(null);
+        }
+      });
+    }
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.token() && !!this.user();
+  }
+
+  isAdmin(): boolean {
+    return this.user()?.perfil?.rol === 'admin';
+  }
+}

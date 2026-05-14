@@ -1,0 +1,72 @@
+<section class="for-you-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Para Ti</h2>
+        <p class="section-subtitle">Seleccionados especialmente para ti</p>
+      </div>
+      <button class="btn btn-outline">Ver Todos</button>
+    </div>
+
+    <div class="products-area">
+      @if (loading()) {
+      <div class="products-grid">
+        @for (i of [1,2,3,4,5,6]; track i) {
+        <div class="skeleton-card"></div>
+        }
+      </div>
+      } @else {
+      <div class="products-grid">
+        @for (product of products(); track product.id) {
+        <div class="product-card">
+          @if (product.badge) {
+          <div class="product-badge">{{ product.badge }}</div>
+          }
+          <button class="wishlist-btn" aria-label="Guardar en favoritos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
+          </button>
+          <div class="product-img">
+            <img [src]="product.imagen" [alt]="product.nombre" />
+          </div>
+          <div class="product-body">
+            <div>
+              <h3 class="product-name">{{ product.nombre }}</h3>
+              <p class="product-desc">{{ product.descripcion }}</p>
+            </div>
+            <div class="product-meta">
+              <div class="product-rating">
+                <span class="badge-rating">{{ product.rating }}</span>
+                <span class="rating-max">/10</span>
+              </div>
+            </div>
+            <div class="product-price">
+              <span class="price-current">${{ product.precio }}</span>
+              @if (product.precio_original) {
+              <span class="price-original">${{ product.precio_original }}</span>
+              }
+            </div>
+            <div class="product-stock">
+              <span class="stock-indicator" [class.low-stock]="getAvailableStock(product) < 10"></span>
+              {{ getAvailableStock(product) > 0 ? getAvailableStock(product) + ' disponibles' : 'Agotado' }}
+            </div>
+            <button class="btn btn-primary btn-sm add-btn" [disabled]="getAvailableStock(product) === 0" (click)="addToCart(product)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+              </svg>
+              Agregar
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</section>

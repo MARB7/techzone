@@ -1,0 +1,217 @@
+<header class="navbar">
+  <div class="container navbar-inner">
+
+    <!-- Logo -->
+    <a routerLink="/" class="navbar-logo" aria-label="TechZone inicio">
+      <span class="logo-icon">
+        <img src="bullet.png" alt="TechZone Logo" class="logo-img" />
+      </span>
+      <span class="logo-text">Tech<span class="logo-highlight">Zone</span></span>
+    </a>
+
+    <!-- Barra de búsqueda -->
+    <div class="search-bar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <input type="search" class="search-input" placeholder="Buscar productos, marcas, categorías…"
+        aria-label="Buscar" />
+    </div>
+
+    <!-- Acciones derecha -->
+    <nav class="navbar-actions">
+      <!-- Links desktop -->
+      <div class="navbar-links">
+        <a routerLink="/productos" class="btn btn-ghost" routerLinkActive="nav-active">Productos</a>
+        <a routerLink="/ofertas" class="btn btn-ghost" routerLinkActive="nav-active">Ofertas</a>
+        <a routerLink="/armar-pc" class="btn btn-accent btn-armar">Armar PC</a>
+      </div>
+
+      <!-- Admin panel (solo admin) o Carrito (usuarios normales) -->
+      @if (isAdmin) {
+      <a routerLink="/admin" class="btn btn-ghost btn-icon admin-nav-btn" routerLinkActive="nav-active" aria-label="Panel Admin" title="Panel Admin">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </a>
+      } @else {
+      <a routerLink="/carrito" class="btn btn-ghost btn-icon cart-btn" aria-label="Carrito">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="8" cy="21" r="1" />
+          <circle cx="19" cy="21" r="1" />
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+        </svg>
+        <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+      </a>
+      }
+
+      <!-- ===== Si NO está logueado: Login + Register ===== -->
+      @if (!user) {
+
+      <!-- Login -->
+      <div class="dropdown-wrap">
+        <button class="btn btn-ghost btn-icon" [class.btn-active]="showLogin()" aria-label="Iniciar sesión"
+          (click)="toggleLogin()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </button>
+
+        @if (showLogin()) {
+        <div class="dropdown-panel dropdown-panel-right" role="dialog" aria-label="Iniciar sesión">
+          <div class="dropdown-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="dropdown-header-icon">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            <h3 class="dropdown-title">Iniciar Sesión</h3>
+            <button class="close-btn" (click)="closeAll()" aria-label="Cerrar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+          <form class="dropdown-form" (submit)="$event.preventDefault(); onLogin()">
+            @if (loginError) {
+            <div class="dropdown-alert dropdown-alert-error">{{ loginError }}</div>
+            }
+            <div class="form-group">
+              <label class="form-label" for="login-username">Usuario</label>
+              <input id="login-username" type="text" class="input" placeholder="Tu usuario"
+                [(ngModel)]="loginUsername" name="loginUsername" autocomplete="username" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="login-password">Contraseña</label>
+              <input id="login-password" type="password" class="input" placeholder="Tu contraseña"
+                [(ngModel)]="loginPassword" name="loginPassword" autocomplete="current-password" />
+            </div>
+            <button type="submit" class="btn btn-primary w-full" [disabled]="loginLoading">
+              {{ loginLoading ? 'Ingresando...' : 'Ingresar' }}
+            </button>
+          </form>
+          <p class="dropdown-footer">
+            ¿No tienes cuenta?
+            <button class="link-btn" (click)="toggleRegister()">Regístrate aquí</button>
+          </p>
+        </div>
+        }
+      </div>
+
+      <!-- Register -->
+      <div class="dropdown-wrap">
+        <button class="btn btn-ghost btn-icon" [class.btn-active]="showRegister()" aria-label="Registrarse"
+          (click)="toggleRegister()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <line x1="19" x2="19" y1="8" y2="14" />
+            <line x1="22" x2="16" y1="11" y2="11" />
+          </svg>
+        </button>
+
+        @if (showRegister()) {
+        <div class="dropdown-panel dropdown-panel-right" role="dialog" aria-label="Registrarse">
+          <div class="dropdown-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="dropdown-header-icon">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <line x1="19" x2="19" y1="8" y2="14" />
+              <line x1="22" x2="16" y1="11" y2="11" />
+            </svg>
+            <h3 class="dropdown-title">Crear Cuenta</h3>
+            <button class="close-btn" (click)="closeAll()" aria-label="Cerrar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+          <form class="dropdown-form" (submit)="$event.preventDefault(); onRegister()">
+            @if (regError) {
+            <div class="dropdown-alert dropdown-alert-error">{{ regError }}</div>
+            }
+            @if (regSuccess) {
+            <div class="dropdown-alert dropdown-alert-success">{{ regSuccess }}</div>
+            }
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="reg-name">Nombre</label>
+                <input id="reg-name" type="text" class="input" placeholder="Juan"
+                  [(ngModel)]="regFirstName" name="regFirstName" autocomplete="given-name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="reg-lastname">Apellido</label>
+                <input id="reg-lastname" type="text" class="input" placeholder="García"
+                  [(ngModel)]="regLastName" name="regLastName" autocomplete="family-name" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-username">Usuario</label>
+              <input id="reg-username" type="text" class="input" placeholder="juangarcia"
+                [(ngModel)]="regUsername" name="regUsername" autocomplete="username" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-email">Correo electrónico</label>
+              <input id="reg-email" type="email" class="input" placeholder="tu&#64;email.com"
+                [(ngModel)]="regEmail" name="regEmail" autocomplete="email" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Contraseña</label>
+              <input id="reg-password" type="password" class="input" placeholder="Mínimo 6 caracteres"
+                [(ngModel)]="regPassword" name="regPassword" autocomplete="new-password" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-confirm">Confirmar contraseña</label>
+              <input id="reg-confirm" type="password" class="input" placeholder="Repite tu contraseña"
+                [(ngModel)]="regPassword2" name="regPassword2" autocomplete="new-password" />
+            </div>
+            <button type="submit" class="btn btn-primary w-full" [disabled]="regLoading">
+              {{ regLoading ? 'Creando...' : 'Crear Cuenta' }}
+            </button>
+          </form>
+          <p class="dropdown-footer">
+            ¿Ya tienes cuenta?
+            <button class="link-btn" (click)="toggleLogin()">Inicia sesión aquí</button>
+          </p>
+        </div>
+        }
+      </div>
+
+      }
+
+      <!-- ===== Si ESTÁ logueado: Avatar + Logout ===== -->
+      @if (user) {
+      <a routerLink="/perfil" class="avatar-btn" [title]="userDisplayName">
+        <img [src]="userAvatar" [alt]="userDisplayName" class="avatar-img" />
+      </a>
+      <button class="btn btn-ghost btn-icon btn-logout-nav" aria-label="Cerrar sesión"
+        (click)="logout()" title="Cerrar sesión">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" x2="9" y1="12" y2="12"/>
+        </svg>
+      </button>
+      }
+
+    </nav>
+  </div>
+
+  <!-- Backdrop -->
+  @if (showLogin() || showRegister()) {
+  <div class="nav-backdrop" (click)="closeAll()"></div>
+  }
+</header>

@@ -1,0 +1,61 @@
+<section class="products-section">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Productos Destacados</h2>
+        <p class="section-subtitle">Los componentes más vendidos de la temporada</p>
+      </div>
+      <button class="btn btn-outline">Ver Todos</button>
+    </div>
+
+    @if (loading()) {
+    <div class="loading-grid">
+      @for (i of [1,2,3,4]; track i) {
+      <div class="skeleton-card"></div>
+      }
+    </div>
+    } @else {
+    <div class="products-grid">
+      @for (product of products(); track product.id) {
+        <article class="product-card">
+          @if (product.badge) {
+            <div class="product-badge">{{ product.badge }}</div>
+          }
+          <div class="product-image">
+            <img [src]="product.imagen" [alt]="product.nombre" />
+          </div>
+          <div class="product-body">
+            <div class="product-rating">
+              <span class="badge-rating">{{ product.rating }}</span>
+              <span class="rating-max">/10</span>
+            </div>
+            <h3 class="product-name">{{ product.nombre }}</h3>
+            <p class="product-desc">{{ product.descripcion }}</p>
+            <div class="product-price">
+              <span class="price-current">${{ product.precio }}</span>
+              @if (product.precio_original) {
+                <span class="price-original">${{ product.precio_original }}</span>
+              }
+            </div>
+            <div class="product-stock">
+              <span class="stock-indicator" [class.low-stock]="getAvailableStock(product) < 10"></span>
+              {{ getAvailableStock(product) > 0 ? getAvailableStock(product) + ' disponibles' : 'Agotado' }}
+            </div>
+            <button class="btn btn-primary btn-cart" [disabled]="getAvailableStock(product) === 0" (click)="addToCart(product)"
+              [class.btn-added]="addedId() === product.id">
+              @if (addedId() === product.id) {
+                ✓ Agregado
+              } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              </svg>
+              Agregar al carrito
+              }
+            </button>
+          </div>
+        </article>
+      }
+    </div>
+    }
+  </div>
+</section>

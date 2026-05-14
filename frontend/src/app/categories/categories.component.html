@@ -1,0 +1,86 @@
+<section class="categories-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Explora por Categoría</h2>
+      <p class="section-subtitle">Encuentra el componente perfecto para tu setup</p>
+    </div>
+
+    <div class="categories-grid">
+      @for (cat of categories; track cat.name) {
+        <a [routerLink]="cat.href" class="category-card">
+          <div class="category-icon-wrap">
+            <ng-container [ngSwitch]="cat.icon">
+
+              <ng-container *ngSwitchCase="'mouse'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="7"/><path d="M12 6v4"/><path d="M5 10h14"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'keyboard'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'monitor'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'cpu'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'gpu'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="20" height="8" x="2" y="8" rx="2"/><path d="M6 8V5c0-.6.4-1 1-1h2"/><path d="M18 8V5c0-.6-.4-1-1-1h-2"/><path d="M6 19v-3"/><path d="M18 19v-3"/><path d="M2 12h20"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'fan'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.413-1.45a6.082 6.082 0 0 1-7.001 8.618l1.45-5.412z"/><circle cx="12" cy="12" r="2"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'headphones'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'gamepad'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'ram'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 19v-3"/><path d="M10 19v-3"/><path d="M14 19v-3"/><path d="M18 19v-3"/><rect width="20" height="9" x="2" y="7" rx="2"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'case'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="18" rx="2"/><path d="M7 10h10M7 14h10"/>
+                </svg>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                </svg>
+              </ng-container>
+            </ng-container>
+          </div>
+          <span class="category-name">{{ cat.name }}</span>
+        </a>
+      }
+    </div>
+  </div>
+</section>

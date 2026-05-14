@@ -1,0 +1,200 @@
+<div class="page-wrapper">
+  <app-navbar />
+
+  <main style="flex:1">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+      <div class="container">
+        <div class="breadcrumb">
+          <span>Inicio</span>
+          <span>/</span>
+          <span class="breadcrumb-current">Productos</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding-block: 1.5rem">
+      <!-- Header -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Todos los Productos</h1>
+          <span class="results-count">({{ filteredProducts().length }} resultados)</span>
+        </div>
+        <div class="page-header-right">
+          <!-- Mobile filter toggle -->
+          <button class="btn btn-outline filter-toggle" (click)="showFilters.set(!showFilters())">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" x2="4" y1="21" y2="14" />
+              <line x1="4" x2="4" y1="10" y2="3" />
+              <line x1="12" x2="12" y1="21" y2="16" />
+              <line x1="12" x2="12" y1="12" y2="3" />
+              <line x1="20" x2="20" y1="21" y2="18" />
+              <line x1="20" x2="20" y1="14" y2="3" />
+              <line x1="1" x2="7" y1="14" y2="14" />
+              <line x1="9" x2="15" y1="16" y2="16" />
+              <line x1="17" x2="23" y1="18" y2="18" />
+            </svg>
+            Filtros
+          </button>
+
+          <!-- Sort -->
+          <select class="select" [value]="sortBy()" (change)="sortBy.set($any($event.target).value); applyFilters()">
+            <option value="relevancia">Relevancia</option>
+            <option value="precio-asc">Precio: Menor a Mayor</option>
+            <option value="precio-desc">Precio: Mayor a Menor</option>
+            <option value="rating">Mejor Puntuación</option>
+          </select>
+
+          <!-- View mode -->
+          <div class="view-toggle">
+            <button class="btn btn-icon view-btn" [class.view-active]="viewMode() === 'grid'"
+              (click)="viewMode.set('grid')" aria-label="Vista grilla">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="7" height="7" x="3" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="3" rx="1" />
+                <rect width="7" height="7" x="14" y="14" rx="1" />
+                <rect width="7" height="7" x="3" y="14" rx="1" />
+              </svg>
+            </button>
+            <button class="btn btn-icon view-btn" [class.view-active]="viewMode() === 'list'"
+              (click)="viewMode.set('list')" aria-label="Vista lista">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" x2="21" y1="6" y2="6" />
+                <line x1="8" x2="21" y1="12" y2="12" />
+                <line x1="8" x2="21" y1="18" y2="18" />
+                <line x1="3" x2="3.01" y1="6" y2="6" />
+                <line x1="3" x2="3.01" y1="12" y2="12" />
+                <line x1="3" x2="3.01" y1="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" [class.sidebar-open]="showFilters()">
+          <div class="sidebar-mobile-header">
+            <h2>Filtros</h2>
+            <button class="btn btn-ghost btn-icon" (click)="showFilters.set(false)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Categories filter -->
+          <div class="filter-box">
+            <h3 class="filter-title">Categorías</h3>
+            <div class="filter-list">
+              @for (cat of categories; track cat.value) {
+              <label class="filter-item">
+                <div class="filter-item-left">
+                  <input type="checkbox" class="checkbox" [checked]="selectedCategories().includes(cat.value)"
+                    (change)="toggleCategory(cat.value)" />
+                  <span class="filter-label">{{ cat.name }}</span>
+                </div>
+              </label>
+              }
+            </div>
+          </div>
+
+          <!-- Price Range -->
+          <div class="filter-box">
+            <h3 class="filter-title">Rango de Precio</h3>
+            <div class="price-inputs">
+              <input type="number" id="price-min" placeholder="Min" class="input" [(ngModel)]="priceMin" />
+              <span style="color: var(--muted-foreground)">-</span>
+              <input type="number" id="price-max" placeholder="Max" class="input" [(ngModel)]="priceMax" />
+            </div>
+          </div>
+
+          <!-- Brands -->
+          <div class="filter-box">
+            <h3 class="filter-title">Marcas</h3>
+            <div class="filter-list">
+              @for (brand of brands; track brand) {
+              <label class="filter-item">
+                <input type="checkbox" class="checkbox" [checked]="selectedBrands().includes(brand)"
+                  (change)="toggleBrand(brand)" />
+                <span class="filter-label">{{ brand }}</span>
+              </label>
+              }
+            </div>
+          </div>
+
+          <div class="filter-box" style="margin-top: 1rem;">
+            <button class="btn btn-primary" style="width: 100%" (click)="applyFilters()">
+              Aplicar Filtros
+            </button>
+          </div>
+        </aside>
+
+        <!-- Products -->
+        <div class="products-area">
+          @if (loading()) {
+          <div class="products-grid">
+            @for (i of [1,2,3,4,5,6]; track i) {
+            <div class="skeleton-card"></div>
+            }
+          </div>
+          } @else {
+          <div class="products-grid" [class.list-view]="viewMode() === 'list'">
+            @for (product of filteredProducts(); track product.id) {
+            <div class="product-card" [class.list-card]="viewMode() === 'list'">
+              @if (product.badge) {
+              <div class="product-badge">{{ product.badge }}</div>
+              }
+              <button class="wishlist-btn" aria-label="Guardar en favoritos">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                </svg>
+              </button>
+              <div class="product-img" [class.list-img]="viewMode() === 'list'">
+                <img [src]="product.imagen" [alt]="product.nombre" />
+              </div>
+              <div class="product-body" [class.list-body]="viewMode() === 'list'">
+                <div>
+                  <h3 class="product-name">{{ product.nombre }}</h3>
+                  <p class="product-desc">{{ product.descripcion }}</p>
+                </div>
+                <div class="product-meta">
+                  <span class="badge-rating">{{ product.rating }}</span>
+                  <span class="stock-info" [class.low-stock]="getAvailableStock(product) < 10">
+                    {{ getAvailableStock(product) > 0 ? getAvailableStock(product) + ' disponibles' : 'Agotado' }}
+                  </span>
+                </div>
+                <div class="product-price">
+                  <span class="price-current">${{ product.precio }}</span>
+                  @if (product.precio_original) {
+                  <span class="price-original">${{ product.precio_original }}</span>
+                  }
+                </div>
+                <button class="btn btn-primary btn-sm add-btn" [disabled]="getAvailableStock(product) === 0" (click)="cartService.addToCart(product)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8" cy="21" r="1" />
+                    <circle cx="19" cy="21" r="1" />
+                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                  </svg>
+                  Agregar
+                </button>
+              </div>
+            </div>
+            }
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <app-footer />
+</div>

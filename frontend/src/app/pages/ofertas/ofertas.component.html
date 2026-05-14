@@ -1,0 +1,83 @@
+<div class="page-wrapper">
+  <app-navbar />
+
+  <main style="flex:1">
+    <!-- Hero Banner Ofertas -->
+    <div class="offers-hero">
+      <div class="container">
+        <div class="hero-content">
+          <div>
+            <h1 class="hero-title">
+              Ofertas <span style="color: var(--accent)">Especiales</span>
+            </h1>
+            <p class="hero-subtitle">Los mejores precios en hardware gaming de alto rendimiento</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="container" style="padding-block: 2rem">
+      @if (loading()) {
+      <div class="offers-grid">
+        @for (i of [1,2,3,4]; track i) {
+        <div class="skeleton-card" style="height: 400px"></div>
+        }
+      </div>
+      } @else {
+      <div class="offers-grid">
+        @for (product of products(); track product.id) {
+          <div class="offer-card">
+            @if (getDiscount(product) > 0) {
+            <div class="discount-tag">-{{ getDiscount(product) }}%</div>
+            }
+            @if (product.badge) {
+              <div class="offer-badge">{{ product.badge }}</div>
+            }
+
+            <div class="offer-img">
+              <img [src]="product.imagen" [alt]="product.nombre" />
+            </div>
+
+            <div class="offer-body">
+              <span class="offer-category">{{ product.categoria }}</span>
+              <h3 class="offer-name">{{ product.nombre }}</h3>
+              <p class="offer-desc">{{ product.descripcion }}</p>
+
+              <div class="offer-meta">
+                <span class="badge-rating">{{ product.rating }}</span>
+                <span class="stock-info" [class.low-stock]="getAvailableStock(product) < 10">
+                  {{ getAvailableStock(product) > 0 ? getAvailableStock(product) + ' disponibles' : 'Agotado' }}
+                </span>
+              </div>
+
+              <div class="offer-pricing">
+                <div>
+                  <span class="price-current">${{ product.precio }}</span>
+                  @if (product.precio_original) {
+                  <span class="price-original">${{ product.precio_original }}</span>
+                  }
+                </div>
+                @if (product.precio_original) {
+                <span class="savings">
+                  Ahorra ${{ (+product.precio_original - +product.precio).toFixed(2) }}
+                </span>
+                }
+              </div>
+
+              <button class="btn btn-primary offer-btn" [disabled]="getAvailableStock(product) === 0" (click)="cartService.addToCart(product)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+                </svg>
+                Agregar al Carrito
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+      }
+    </div>
+  </main>
+
+  <app-footer />
+</div>
