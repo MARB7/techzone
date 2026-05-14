@@ -28,6 +28,7 @@ class Producto(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
     badge = models.CharField(max_length=50, blank=True, default='')
     destacado = models.BooleanField(default=False)
+    en_carrusel = models.BooleanField(default=False)
     en_oferta = models.BooleanField(default=False)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 

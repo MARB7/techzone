@@ -15,6 +15,7 @@ import { CartService } from '../cart.service';
 export class NavbarComponent {
   showLogin    = signal(false);
   showRegister = signal(false);
+  searchQuery = '';
 
   // Login fields
   loginUsername = '';
@@ -138,6 +139,14 @@ export class NavbarComponent {
   }
 
   logout() { this.auth.logout(); this.router.navigate(['/']); }
+
+  onSearch() {
+    const q = this.searchQuery.trim();
+    if (q) {
+      this.router.navigate(['/productos'], { queryParams: { q } });
+      this.searchQuery = ''; // clear after search
+    }
+  }
 
   @HostListener('document:keydown.escape') onEscape() { this.closeAll(); }
 }

@@ -5,6 +5,7 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { FooterComponent } from '../../footer/footer.component';
 import { ProductoService, Producto } from '../../producto.service';
 import { CartService } from '../../cart.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
@@ -43,14 +44,23 @@ export class ProductosComponent implements OnInit {
 
   pages = [1];
   currentPage = signal(1);
+  searchQuery = signal('');
 
   constructor(
     private productoService: ProductoService,
-    public cartService: CartService
+    public cartService: CartService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.loadProducts();
+    this.route.queryParams.subscribe(params => {
+      this.searchQuery.set(params['q'] || '');
+      if (this.allProducts.length === 0) {
+        this.loadProducts();
+      } else {
+        this.applyFilters();
+      }
+    });
   }
 
   loadProducts() {
@@ -69,6 +79,19 @@ export class ProductosComponent implements OnInit {
 
   applyFilters() {
     let products = this.allProducts;
+
+    const q = this.searchQuery().toLowerCase().trim();
+    if (q) {
+      products = products.filter(p => {
+        const text = (p.nombre + ' ' + p.categoria + ' ' + p.descripcion).toLowerCase();
+        // Alias comunes
+        if (q === 'maus' || q === 'raton') return text.includes('mouse') || text.includes(q);
+        if (q === 'compu' || q === 'pc') return text.includes('procesador') || text.includes('chasis') || text.includes(q);
+        if (q === 'grafica' || q === 'video') return text.includes('tarjetas_graficas') || text.includes('grafica') || text.includes(q);
+        
+        return text.includes(q);
+      });
+    }
 
     const cats = this.selectedCategories();
     if (cats.length > 0) {

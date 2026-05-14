@@ -17,7 +17,7 @@
         <path d="m21 21-4.3-4.3" />
       </svg>
       <input type="search" class="search-input" placeholder="Buscar productos, marcas, categorías…"
-        aria-label="Buscar" />
+        aria-label="Buscar" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" />
     </div>
 
     <!-- Acciones derecha -->

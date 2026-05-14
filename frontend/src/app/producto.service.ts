@@ -14,6 +14,7 @@ export interface Producto {
   rating: number;
   badge: string;
   destacado: boolean;
+  en_carrusel: boolean;
   en_oferta: boolean;
   fecha_creacion: string;
 }
@@ -30,6 +31,10 @@ export class ProductoService {
 
   getDestacados(): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${this.API_URL}?destacado=true`);
+  }
+
+  getCarrusel(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(`${this.API_URL}?en_carrusel=true`);
   }
 
   getOfertas(): Observable<Producto[]> {

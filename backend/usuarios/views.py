@@ -68,21 +68,21 @@ def logout(request):
 def user_profile(request):
     """Obtener o actualizar perfil del usuario autenticado"""
     user = request.user
-        if request.method == 'GET':
-            return Response(UserSerializer(user).data)
-        elif request.method == 'PUT':
-            user.first_name = request.data.get('first_name', user.first_name)
-            user.last_name = request.data.get('last_name', user.last_name)
-            user.email = request.data.get('email', user.email)
-            telefono = request.data.get('telefono')
-            if telefono is not None:
-                user.perfil.telefono = telefono
-            avatar = request.FILES.get('avatar')
-            if avatar:
-                user.perfil.avatar = avatar
-            user.perfil.save()
-            user.save()
-            return Response(UserSerializer(user).data)
+    if request.method == 'GET':
+        return Response(UserSerializer(user).data)
+    elif request.method == 'PUT':
+        user.first_name = request.data.get('first_name', user.first_name)
+        user.last_name = request.data.get('last_name', user.last_name)
+        user.email = request.data.get('email', user.email)
+        telefono = request.data.get('telefono')
+        if telefono is not None:
+            user.perfil.telefono = telefono
+        avatar = request.FILES.get('avatar')
+        if avatar:
+            user.perfil.avatar = avatar
+        user.perfil.save()
+        user.save()
+        return Response(UserSerializer(user).data)
 
 class ChangePasswordView(APIView):
     authentication_classes = [TokenAuthentication]

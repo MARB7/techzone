@@ -33,15 +33,21 @@ def producto_list(request):
     if destacado == 'true':
         productos = productos.filter(destacado=True)
 
+    # Filtrar carrusel
+    en_carrusel = request.query_params.get('en_carrusel', None)
+    if en_carrusel == 'true':
+        productos = productos.filter(en_carrusel=True)
+
     # Filtrar ofertas
     en_oferta = request.query_params.get('en_oferta', None)
     if en_oferta == 'true':
         productos = productos.filter(en_oferta=True)
 
-    # Búsqueda por nombre
+    # Búsqueda por nombre o categoría
     search = request.query_params.get('search', None)
     if search:
-        productos = productos.filter(nombre__icontains=search)
+        from django.db.models import Q
+        productos = productos.filter(Q(nombre__icontains=search) | Q(categoria__icontains=search))
 
     serializer = ProductoSerializer(productos, many=True, context={'request': request})
     return Response(serializer.data)

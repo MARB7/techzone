@@ -8,5 +8,5 @@ class ProductoSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'nombre', 'descripcion', 'precio', 'precio_original',
             'imagen', 'cantidad', 'categoria', 'rating', 'badge',
-            'destacado', 'en_oferta', 'fecha_creacion'
+            'destacado', 'en_carrusel', 'en_oferta', 'fecha_creacion'
         ]

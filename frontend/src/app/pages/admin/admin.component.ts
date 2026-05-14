@@ -36,6 +36,7 @@ export class AdminComponent {
   pRating = '';
   pBadge = '';
   pDestacado = false;
+  pEnCarrusel = false;
   pEnOferta = false;
   file?: File;
   preview?: string;
@@ -150,6 +151,7 @@ export class AdminComponent {
     this.pRating = String(p.rating);
     this.pBadge = p.badge || '';
     this.pDestacado = p.destacado;
+    this.pEnCarrusel = p.en_carrusel;
     this.pEnOferta = p.en_oferta;
     this.showProductForm = true;
   }
@@ -166,6 +168,7 @@ export class AdminComponent {
     formData.append('rating', this.pRating || '0');
     if (this.pBadge) formData.append('badge', this.pBadge);
     formData.append('destacado', String(this.pDestacado));
+    formData.append('en_carrusel', String(this.pEnCarrusel));
     formData.append('en_oferta', String(this.pEnOferta));
 
     if (this.file) {
@@ -217,13 +220,14 @@ export class AdminComponent {
     formData.append('rating', String(p.rating || '0'));
     if (p.badge) formData.append('badge', p.badge);
     
-    // Invertir el estado de destacado
-    formData.append('destacado', String(!p.destacado));
+    // Invertir el estado de en_carrusel
+    formData.append('destacado', String(p.destacado));
+    formData.append('en_carrusel', String(!p.en_carrusel));
     formData.append('en_oferta', String(p.en_oferta));
 
     this.adminService.editarProducto(p.id, formData).subscribe({
       next: () => {
-        this.successMsg = !p.destacado ? 'Producto mostrado en el carrusel' : 'Producto ocultado del carrusel';
+        this.successMsg = !p.en_carrusel ? 'Producto mostrado en el carrusel' : 'Producto ocultado del carrusel';
         this.loadProductos();
       },
       error: (e) => this.errorMsg = e.error?.error || 'Error al actualizar'
@@ -255,6 +259,7 @@ export class AdminComponent {
     this.pRating = '';
     this.pBadge = '';
     this.pDestacado = false;
+    this.pEnCarrusel = false;
     this.pEnOferta = false;
     this.file = undefined;
     this.preview = undefined;

@@ -20,9 +20,9 @@ export class HeroCarouselComponent implements OnInit, OnDestroy {
   constructor(private productoService: ProductoService) {}
 
   ngOnInit() {
-    this.productoService.getDestacados().subscribe({
+    this.productoService.getCarrusel().subscribe({
       next: (data) => {
-        // Tomar los primeros 5 productos destacados para el carrusel
+        // Tomar los primeros 5 productos para el carrusel
         this.slides = data.slice(0, 5);
         this.loading = false;
         if (this.slides.length > 0) {
