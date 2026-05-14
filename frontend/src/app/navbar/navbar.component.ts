@@ -1,4 +1,4 @@
-import { Component, signal, HostListener } from '@angular/core';
+import { Component, signal, HostListener, effect } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -33,7 +33,16 @@ export class NavbarComponent {
   regSuccess: string | null = null;
   regLoading = false;
 
-  constructor(private auth: AuthService, private router: Router, private cart: CartService) {}
+  constructor(private auth: AuthService, private router: Router, private cart: CartService) {
+    // Escuchar cuando otro componente pide abrir el login
+    effect(() => {
+      if (this.auth.showLoginModal()) {
+        this.showLogin.set(true);
+        this.showRegister.set(false);
+        this.auth.showLoginModal.set(false);
+      }
+    });
+  }
 
   get user() { return this.auth.user(); }
   get isAdmin() { return this.auth.isAdmin(); }

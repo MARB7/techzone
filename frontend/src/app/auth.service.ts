@@ -27,6 +27,7 @@ export class AuthService {
   private API_URL = 'http://localhost:8000/api/usuarios/';
   user = signal<User | null>(null);
   token = signal<string | null>(localStorage.getItem('token'));
+  showLoginModal = signal(false);
 
   constructor(private http: HttpClient) {
     if (this.token()) {

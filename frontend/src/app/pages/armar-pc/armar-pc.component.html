@@ -37,14 +37,14 @@
               <div class="selector-info">
                 <h3 class="selector-name">{{ cat.name }}</h3>
                 @if (isSelected(cat.id)) {
-                  <p class="selector-value">{{ getSelected(cat.id)?.name }}</p>
+                  <p class="selector-value">{{ getSelected(cat.id)?.nombre }}</p>
                 } @else {
                   <p class="selector-add">+ Seleccionar</p>
                 }
               </div>
               @if (isSelected(cat.id)) {
                 <div class="selector-right">
-                  <span class="selector-price">${{ getSelected(cat.id)?.price }}</span>
+                  <span class="selector-price">${{ getSelected(cat.id)?.precio }}</span>
                   <button class="remove-btn" (click)="removeComponent($event, cat.id)" aria-label="Quitar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                   </button>
@@ -126,14 +126,14 @@
               <div class="selector-info">
                 <h3 class="selector-name">{{ cat.name }}</h3>
                 @if (isSelected(cat.id)) {
-                  <p class="selector-value">{{ getSelected(cat.id)?.name }}</p>
+                  <p class="selector-value">{{ getSelected(cat.id)?.nombre }}</p>
                 } @else {
                   <p class="selector-add">+ Seleccionar</p>
                 }
               </div>
               @if (isSelected(cat.id)) {
                 <div class="selector-right">
-                  <span class="selector-price">${{ getSelected(cat.id)?.price }}</span>
+                  <span class="selector-price">${{ getSelected(cat.id)?.precio }}</span>
                   <button class="remove-btn" (click)="removeComponent($event, cat.id)" aria-label="Quitar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                   </button>
@@ -156,7 +156,7 @@
                 </div>
                 <h4 class="mobile-cat-name">{{ cat.name }}</h4>
                 @if (isSelected(cat.id)) {
-                  <p class="mobile-price">${{ getSelected(cat.id)?.price }}</p>
+                  <p class="mobile-price">${{ getSelected(cat.id)?.precio }}</p>
                 } @else {
                   <p class="mobile-add">+ Agregar</p>
                 }
@@ -185,7 +185,7 @@
         </div>
         <div class="summary-right">
           <span class="summary-total-mobile">${{ totalPrice.toFixed(2) }}</span>
-          <button class="btn btn-primary" [disabled]="selectedCount === 0">
+          <button class="btn btn-primary" [disabled]="selectedCount === 0" (click)="addAllToCart()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
             </svg>
@@ -210,33 +210,51 @@
           <p class="modal-subtitle">Elige el componente que mejor se adapte a tus necesidades</p>
         </div>
         <div class="modal-body">
-          @for (option of activeCategory()?.options; track option.id) {
-            <div
-              class="option-card"
-              [class.option-selected]="isCurrentlySelected(activeCategory()!.id, option.id)"
-              (click)="selectComponent(activeCategory()!.id, option)"
-            >
-              <div class="option-img">
-                <img [src]="option.image" [alt]="option.name" />
-              </div>
-              <div class="option-info">
-                <h3 class="option-name">{{ option.name }}</h3>
-                <p class="option-specs">{{ option.specs }}</p>
-                <div class="option-rating">
-                  <span class="badge-rating">{{ option.rating.toFixed(1) }}</span>
-                  <span style="font-size:0.75rem; color:var(--muted-foreground)">/10</span>
+          @if (activeCategory()?.loading) {
+            <div class="modal-loading">
+              <div class="loading-spinner"></div>
+              <p>Cargando productos...</p>
+            </div>
+          } @else if (activeCategory()?.options?.length === 0) {
+            <div class="modal-empty">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--muted-foreground)">
+                <circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>
+              </svg>
+              <p style="color: var(--muted-foreground); margin-top: 0.5rem">No hay productos disponibles en esta categoría</p>
+            </div>
+          } @else {
+            @for (option of activeCategory()?.options; track option.id) {
+              <div
+                class="option-card"
+                [class.option-selected]="isCurrentlySelected(activeCategory()!.id, option.id)"
+                (click)="selectComponent(activeCategory()!.id, option)"
+              >
+                <div class="option-img">
+                  <img [src]="option.imagen" [alt]="option.nombre" />
+                </div>
+                <div class="option-info">
+                  <h3 class="option-name">{{ option.nombre }}</h3>
+                  <p class="option-specs">{{ option.descripcion | slice:0:80 }}...</p>
+                  <div class="option-meta">
+                    <span class="badge-rating">{{ option.rating }}</span>
+                    <span style="font-size:0.75rem; color:var(--muted-foreground)">/10</span>
+                    <span class="option-stock">{{ option.cantidad }} disp.</span>
+                  </div>
+                </div>
+                <div class="option-right">
+                  <span class="option-price">${{ option.precio }}</span>
+                  @if (option.precio_original) {
+                    <span class="option-price-old">${{ option.precio_original }}</span>
+                  }
+                  @if (isCurrentlySelected(activeCategory()!.id, option.id)) {
+                    <div class="option-check">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                      Seleccionado
+                    </div>
+                  }
                 </div>
               </div>
-              <div class="option-right">
-                <span class="option-price">${{ option.price }}</span>
-                @if (isCurrentlySelected(activeCategory()!.id, option.id)) {
-                  <div class="option-check">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                    Seleccionado
-                  </div>
-                }
-              </div>
-            </div>
+            }
           }
         </div>
       </div>

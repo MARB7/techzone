@@ -2,7 +2,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
@@ -55,16 +55,19 @@ def login(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def logout(request):
     """Logout de usuario"""
     request.user.auth_token.delete()
     return Response({'message': 'Logout exitoso'}, status=status.HTTP_200_OK)
 
 @api_view(['GET', 'PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def user_profile(request):
     """Obtener o actualizar perfil del usuario autenticado"""
-    if request.user.is_authenticated:
-        user = request.user
+    user = request.user
         if request.method == 'GET':
             return Response(UserSerializer(user).data)
         elif request.method == 'PUT':
@@ -80,7 +83,6 @@ def user_profile(request):
             user.perfil.save()
             user.save()
             return Response(UserSerializer(user).data)
-    return Response({'error': 'No autenticado'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class ChangePasswordView(APIView):
     authentication_classes = [TokenAuthentication]

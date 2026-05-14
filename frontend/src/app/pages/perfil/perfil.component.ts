@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth.service';
@@ -9,7 +9,7 @@ import { FooterComponent } from '../../footer/footer.component';
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [RouterLink, NavbarComponent, FooterComponent, CommonModule, FormsModule],
+  imports: [NavbarComponent, FooterComponent, CommonModule, FormsModule],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.css'
 })

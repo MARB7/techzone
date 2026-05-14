@@ -141,15 +141,36 @@
           </div>
 
           <!-- Checkout -->
-          <button class="input" type="button" expand="block">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <rect width="20" height="14" x="2" y="5" rx="2"/>
-              <line x1="2" x2="22" y1="10" y2="10"/>
-            </svg>
-            Proceder al pago
+          <button class="btn-checkout" type="button"
+            [disabled]="processing()"
+            (click)="onCheckout()">
+            @if (processing()) {
+              <svg class="spinner" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+              </svg>
+              Procesando...
+            } @else {
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect width="20" height="14" x="2" y="5" rx="2"/>
+                <line x1="2" x2="22" y1="10" y2="10"/>
+              </svg>
+              Proceder al pago
+            }
           </button>
+
+          @if (checkoutError()) {
+            <div class="checkout-msg checkout-error">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="15" x2="9" y1="9" y2="15"/>
+                <line x1="9" x2="15" y1="9" y2="15"/>
+              </svg>
+              {{ checkoutError() }}
+            </div>
+          }
 
           <div class="payment-icons">
             <span class="pay-icon">VISA</span>
@@ -159,6 +180,22 @@
           </div>
         </aside>
 
+      </div>
+    }
+
+    @if (checkoutSuccess()) {
+      <div class="checkout-success-overlay">
+        <div class="checkout-success-card">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="success-icon">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <h2 class="success-title">¡Compra realizada!</h2>
+          <p class="success-sub">Tu pedido ha sido procesado exitosamente. El stock ha sido actualizado.</p>
+          <a href="/productos" class="btn btn-primary">Seguir comprando</a>
+        </div>
       </div>
     }
 

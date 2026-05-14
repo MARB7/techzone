@@ -1,4 +1,5 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Producto } from './producto.service';
 
 export interface CartItem {
@@ -8,7 +9,15 @@ export interface CartItem {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
+  private http = inject(HttpClient);
+  private API_URL = 'http://localhost:8000/api/productos/';
+
   private items = signal<CartItem[]>(this.loadFromStorage());
+
+  // Estado del checkout
+  processing = signal(false);
+  checkoutError = signal<string | null>(null);
+  checkoutSuccess = signal(false);
 
   readonly cartItems = computed(() => this.items());
   readonly totalItems = computed(() => this.items().reduce((sum, i) => sum + i.qty, 0));
@@ -17,7 +26,7 @@ export class CartService {
     const original = i.producto.precio_original ? Number(i.producto.precio_original) : Number(i.producto.precio);
     return sum + (original - Number(i.producto.precio)) * i.qty;
   }, 0));
-  readonly total = computed(() => this.subtotal() - this.savings());
+  readonly total = computed(() => this.subtotal());
 
   addToCart(producto: Producto) {
     const current = this.items();
@@ -58,6 +67,47 @@ export class CartService {
   clearCart() {
     this.items.set([]);
     this.saveToStorage();
+  }
+
+  /**
+   * Proceder al pago: envía los items del carrito al backend
+   * para descontar stock de cada producto.
+   */
+  checkout() {
+    const cartItems = this.items();
+    if (cartItems.length === 0) return;
+
+    this.processing.set(true);
+    this.checkoutError.set(null);
+    this.checkoutSuccess.set(false);
+
+    const payload = {
+      items: cartItems.map(i => ({
+        producto_id: i.producto.id,
+        qty: i.qty
+      }))
+    };
+
+    this.http.post<{ message: string; productos: any[] }>(
+      `${this.API_URL}checkout/`,
+      payload
+    ).subscribe({
+      next: () => {
+        this.clearCart();
+        this.processing.set(false);
+        this.checkoutSuccess.set(true);
+        // Auto-ocultar mensaje de éxito después de 5 segundos
+        setTimeout(() => this.checkoutSuccess.set(false), 5000);
+      },
+      error: (err) => {
+        this.processing.set(false);
+        this.checkoutError.set(
+          err.error?.error || 'Error al procesar el pago. Intenta de nuevo.'
+        );
+        // Auto-ocultar error después de 5 segundos
+        setTimeout(() => this.checkoutError.set(null), 5000);
+      }
+    });
   }
 
   private saveToStorage() {

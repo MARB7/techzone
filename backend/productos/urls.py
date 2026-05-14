@@ -5,6 +5,7 @@ app_name = 'productos'
 
 urlpatterns = [
     path('', views.producto_list, name='list'),
+    path('checkout/', views.checkout, name='checkout'),
     path('<int:pk>/', views.producto_detail, name='detail'),
     # Admin endpoints
     path('admin/crear/', views.AdminProductoView.as_view(), name='admin-create'),
