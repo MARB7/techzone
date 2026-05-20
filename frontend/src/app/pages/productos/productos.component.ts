@@ -33,6 +33,7 @@ export class ProductosComponent implements OnInit {
     { name: 'Auriculares', value: 'auriculares' },
     { name: 'Ventiladores', value: 'ventiladores' },
     { name: 'Chasis', value: 'chasis' },
+    { name: 'Gamepads', value: 'gamepads' },
   ];
 
   brands = ['AMD', 'NVIDIA', 'Intel', 'Corsair', 'ASUS', 'Logitech', 'Samsung', 'NZXT', 'Razer', 'HyperX'];
@@ -55,6 +56,14 @@ export class ProductosComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.searchQuery.set(params['q'] || '');
+      
+      const catParam = params['category'];
+      if (catParam) {
+        this.selectedCategories.set([catParam]);
+      } else {
+        this.selectedCategories.set([]);
+      }
+
       if (this.allProducts.length === 0) {
         this.loadProducts();
       } else {

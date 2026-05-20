@@ -7,7 +7,7 @@
 
     <div class="categories-grid">
       @for (cat of categories; track cat.name) {
-        <a [routerLink]="cat.href" class="category-card">
+        <a [routerLink]="cat.href" [queryParams]="{ category: cat.value }" class="category-card">
           <div class="category-icon-wrap">
             <ng-container [ngSwitch]="cat.icon">
 
