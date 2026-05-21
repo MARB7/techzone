@@ -1,9 +1,8 @@
 import { isDevMode } from '@angular/core';
 
-// Dirección base del API del backend.
-// - En modo desarrollo (dev) local: apunta a http://localhost:8000
-// - En producción: apunta a la dirección de tu servidor backend en Azure.
-// Puedes cambiar 'https://techzone-api.azurewebsites.net' por el subdominio de Azure real de tu API.
+// Determina la URL de la API del backend
+// - Si estás programando localmente: usa http://localhost:8000
+// - Si estás en producción (Azure): usa la IP pública de tu servidor de Azure (ej. puerto 8000)
 export const API_BASE_URL = isDevMode()
   ? 'http://localhost:8000'
-  : 'https://techzone-api.azurewebsites.net'; // <-- Reemplaza con tu URL de Azure
+  : 'http://20.151.88.18:8000'; // <-- Aquí pones la IP pública de tu backend en Azure

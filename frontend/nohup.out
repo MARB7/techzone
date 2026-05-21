@@ -1,0 +1,36 @@
+
+Warning: This is a simple server for use in testing or debugging Angular applications
+locally. It hasn't been reviewed for security issues.
+
+Binding this server to an open connection can result in compromising your application or
+computer. Using a different host than the one passed to the "--host" flag might result in
+websocket connection issues.
+    
+❯ Building...
+✔ Building...
+Initial chunk files | Names               |  Raw size
+styles.css          | styles              |   8.48 kB | 
+main.js             | main                |   4.21 kB | 
+chunk-RJEPFPSB.js   | -                   |   4.15 kB | 
+
+                    | Initial total       |  16.85 kB
+
+Lazy chunk files    | Names               |  Raw size
+chunk-3DRJOGLQ.js   | home-component      | 107.08 kB | 
+chunk-DFLUI3ZD.js   | -                   |  87.77 kB | 
+chunk-TQDTPRRQ.js   | armar-pc-component  |  85.23 kB | 
+chunk-VF4ZLSYM.js   | admin-component     |  66.93 kB | 
+chunk-C6XPECET.js   | productos-component |  52.19 kB | 
+chunk-HWHL4MNG.js   | carrito-component   |  50.06 kB | 
+chunk-SKR3XZA6.js   | perfil-component    |  38.05 kB | 
+chunk-PD2F3DX5.js   | registro-component  |  28.18 kB | 
+chunk-FO65Q3YG.js   | ofertas-component   |  26.00 kB | 
+chunk-L6O4AG2R.js   | login-component     |  17.11 kB | 
+chunk-S6XV3DS4.js   | -                   |   1.71 kB | 
+
+Application bundle generation complete. [7.265 seconds] - 2026-05-21T03:31:30.741Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  ➜  Local:   http://localhost:4200/
+  ➜  Network: http://10.5.0.4:4200/

@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { API_BASE_URL } from './config';
 
 export interface User {
   id: number;
@@ -24,7 +25,7 @@ export interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private API_URL = 'http://localhost:8000/api/usuarios/';
+  private API_URL = `${API_BASE_URL}/api/usuarios/`;
   user = signal<User | null>(null);
   token = signal<string | null>(localStorage.getItem('token'));
   showLoginModal = signal(false);

@@ -23,9 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$+$vvepbdfsy@4%6jy4pstove9nqt&9&5%vp!=8&(cr)1hgp%k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "20.151.88.18",
+]
 
 
 # Application definition
@@ -82,8 +86,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bases_1',
-        'USER': 'postgres',
-        'PASSWORD': '1',
+        'USER': 'maicol',
+        'PASSWORD': 'sapoperro08.',
         'HOST': 'localhost',
         'PORT': '5432',
         'OPTIONS': {
@@ -138,6 +142,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
     "http://127.0.0.1:4200",
+    "http://20.151.88.18",
+    "https://20.151.88.18",
+    "http://20.151.88.18:4200",
 ]
 
 # REST Framework Configuration
@@ -145,11 +152,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+    # Protege todos los endpoints por defecto. Requiere Token de autenticación.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
-
 # Media files
 import os
 MEDIA_URL = '/media/'
