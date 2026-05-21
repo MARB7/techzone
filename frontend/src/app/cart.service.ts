@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Producto } from './producto.service';
 import { API_BASE_URL } from './config';
 
@@ -91,7 +91,12 @@ export class CartService {
 
     this.http.post<{ message: string; productos: any[] }>(
       `${this.API_URL}checkout/`,
-      payload
+      payload,
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Token ${localStorage.getItem('token')}`
+        })
+      }
     ).subscribe({
       next: () => {
         this.clearCart();
