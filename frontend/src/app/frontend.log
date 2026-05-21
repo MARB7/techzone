@@ -35,3 +35,25 @@ Watch mode enabled. Watching for file changes...
 NOTE: Raw file sizes do not reflect development server per-request transformations.
   ➜  Local:   http://localhost:4200/
   ➜  Network: http://10.5.0.4:4200/
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names               |  Raw size
+main.js             | main                |   4.19 kB | 
+chunk-JKCQIT2M.js   | -                   |   4.04 kB | 
+
+Lazy chunk files    | Names               |  Raw size
+chunk-4WSDA7RL.js   | home-component      | 106.95 kB | 
+chunk-655UFXHU.js   | -                   |  87.74 kB | 
+chunk-4FJE4XKU.js   | armar-pc-component  |  85.21 kB | 
+chunk-AKYVLTPH.js   | admin-component     |  66.91 kB | 
+chunk-DOF3MP33.js   | productos-component |  52.17 kB | 
+chunk-MQIDVLGY.js   | carrito-component   |  50.04 kB | 
+chunk-VBGWS36C.js   | perfil-component    |  38.04 kB | 
+chunk-R4TTZCPO.js   | registro-component  |  28.16 kB | 
+chunk-4C3NSYDY.js   | ofertas-component   |  25.98 kB | 
+chunk-XG7FKGVZ.js   | login-component     |  17.09 kB | 
+chunk-ZBAITRMD.js   | -                   |   1.72 kB | 
+
+Application bundle generation complete. [3.745 seconds] - 2026-05-21T04:52:59.826Z
+
+Page reload sent to client(s).

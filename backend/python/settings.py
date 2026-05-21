@@ -87,14 +87,13 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', 'bases_1'),
         'USER': os.environ.get('DB_USER', 'maicol'),
         'PASSWORD': os.environ.get('DB_PASSWORD', 'sapoperro08.'),
-        'HOST': os.environ.get('DB_HOST', 'tu-servidor-azure-db.postgres.database.azure.com'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'), # <-- Cambiado a localhost aquí
         'PORT': os.environ.get('DB_PORT', '5432'),
         'OPTIONS': {
             'client_encoding': 'UTF8',
         }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
