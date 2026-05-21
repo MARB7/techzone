@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard, adminGuard } from './auth.guard';
 
 export const routes: Routes = [
   {
@@ -31,11 +32,13 @@ export const routes: Routes = [
   },
   {
     path: 'perfil',
-    loadComponent: () => import('./pages/perfil/perfil.component').then(m => m.PerfilComponent)
+    loadComponent: () => import('./pages/perfil/perfil.component').then(m => m.PerfilComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'admin',
-    loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent)
+    loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
+    canActivate: [adminGuard]
   },
   { path: '**', redirectTo: '' }
 ];

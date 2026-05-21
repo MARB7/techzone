@@ -2,113 +2,116 @@
   <app-navbar />
 
   <main class="main">
-
-    <!-- Hero del perfil -->
-    <div class="profile-hero">
-      <div class="hero-bg"></div>
-      <div class="container hero-content">
-        <div class="avatar-wrap">
-          <img [src]="avatarPreview || userAvatar" [alt]="userDisplayName" class="profile-avatar" />
-          <div class="avatar-ring"></div>
-        </div>
-        <div class="hero-info">
-          <h1 class="profile-name">{{ userDisplayName }}</h1>
-          <p class="profile-email">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+    @if (auth.user()) {
+      <!-- Hero del perfil -->
+      <div class="profile-hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+          <div class="avatar-wrap">
+            <img [src]="avatarPreview || userAvatar" [alt]="userDisplayName" class="profile-avatar" />
+            <div class="avatar-ring"></div>
+          </div>
+          <div class="hero-info">
+            <h1 class="profile-name">{{ userDisplayName }}</h1>
+            <p class="profile-email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              {{ user.email }}
+            </p>
+            <span class="member-badge">Miembro TechZone</span>
+          </div>
+          <button class="btn-logout" (click)="logout()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
-              <rect width="20" height="16" x="2" y="4" rx="2"/>
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" x2="9" y1="12" y2="12"/>
             </svg>
-            {{ user.email }}
-          </p>
-          <span class="member-badge">Miembro TechZone</span>
+            Cerrar sesión
+          </button>
         </div>
-        <button class="btn-logout" (click)="logout()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" x2="9" y1="12" y2="12"/>
-          </svg>
-          Cerrar sesión
-        </button>
       </div>
-    </div>
 
-    <!-- Grid de tarjetas -->
-    <div class="container cards-grid">
+      <!-- Grid de tarjetas -->
+      <div class="container cards-grid">
 
-      <!-- Datos personales -->
-      <section class="profile-card">
-        <div class="card-header">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" class="card-icon">
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          <h2 class="card-title">Datos personales</h2>
-        </div>
-        @if (msg) {
-          <div class="alert alert-success" style="margin: 1rem">{{ msg }}</div>
-        }
-
-        <div class="card-body">
-          @if (!isEditing) {
-            <div class="data-row">
-              <span class="data-label">Nombre completo</span>
-              <span class="data-value">{{ userDisplayName }}</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Correo electrónico</span>
-              <span class="data-value">{{ user.email }}</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Teléfono</span>
-              <span class="data-value" [class.data-empty]="!user.perfil?.telefono">
-                {{ user.perfil?.telefono || 'No configurado' }}
-              </span>
-            </div>
-          } @else {
-            <form (submit)="$event.preventDefault(); saveProfile()">
-              <div class="form-group" style="margin-bottom: 1rem">
-                <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Nombre</label>
-                <input type="text" class="input" [(ngModel)]="editData.first_name" name="first_name" />
-              </div>
-              <div class="form-group" style="margin-bottom: 1rem">
-                <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Apellido</label>
-                <input type="text" class="input" [(ngModel)]="editData.last_name" name="last_name" />
-              </div>
-              <div class="form-group" style="margin-bottom: 1rem">
-                <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Correo electrónico</label>
-                <input type="email" class="input" [(ngModel)]="editData.email" name="email" required />
-              </div>
-              <div class="form-group" style="margin-bottom: 1rem">
-                <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Teléfono</label>
-                <input type="tel" class="input" [(ngModel)]="editData.telefono" name="telefono" />
-              </div>
-              <div class="form-group full-width" style="margin-bottom: 1rem">
-                <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Avatar (opcional)</label>
-                <input type="file" #fileinput (change)="onFileChange($event)" hidden accept="image/*">
-                <button class="input" type="button" style="text-align: center; cursor: pointer" (click)="fileinput.click()">Elegir nueva foto de perfil</button>
-              </div>
-              <div style="display: flex; gap: 0.5rem; margin-top: 1rem">
-                <button type="button" class="btn btn-outline btn-sm" (click)="toggleEdit()" style="flex:1">Cancelar</button>
-                <button type="submit" class="btn btn-primary btn-sm" style="flex:1">Guardar</button>
-              </div>
-            </form>
+        <!-- Datos personales -->
+        <section class="profile-card">
+          <div class="card-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="card-icon">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <h2 class="card-title">Datos personales</h2>
+          </div>
+          @if (msg) {
+            <div class="alert alert-success" style="margin: 1rem">{{ msg }}</div>
           }
-        </div>
-        
-        @if (!isEditing) {
-          <button class="btn-card-action" (click)="toggleEdit()">Editar datos</button>
-        }
-      </section>
 
-
-    </div>
+          <div class="card-body">
+            @if (!isEditing) {
+              <div class="data-row">
+                <span class="data-label">Nombre completo</span>
+                <span class="data-value">{{ userDisplayName }}</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Correo electrónico</span>
+                <span class="data-value">{{ user.email }}</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Teléfono</span>
+                <span class="data-value" [class.data-empty]="!user.perfil?.telefono">
+                  {{ user.perfil?.telefono || 'No configurado' }}
+                </span>
+              </div>
+            } @else {
+              <form (submit)="$event.preventDefault(); saveProfile()">
+                <div class="form-group" style="margin-bottom: 1rem">
+                  <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Nombre</label>
+                  <input type="text" class="input" [(ngModel)]="editData.first_name" name="first_name" />
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem">
+                  <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Apellido</label>
+                  <input type="text" class="input" [(ngModel)]="editData.last_name" name="last_name" />
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem">
+                  <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Correo electrónico</label>
+                  <input type="email" class="input" [(ngModel)]="editData.email" name="email" required />
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem">
+                  <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Teléfono</label>
+                  <input type="tel" class="input" [(ngModel)]="editData.telefono" name="telefono" />
+                </div>
+                <div class="form-group full-width" style="margin-bottom: 1rem">
+                  <label class="form-label" style="font-size: 0.8rem; color: var(--muted-foreground)">Avatar (opcional)</label>
+                  <input type="file" #fileinput (change)="onFileChange($event)" hidden accept="image/*">
+                  <button class="input" type="button" style="text-align: center; cursor: pointer" (click)="fileinput.click()">Elegir nueva foto de perfil</button>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem">
+                  <button type="button" class="btn btn-outline btn-sm" (click)="toggleEdit()" style="flex:1">Cancelar</button>
+                  <button type="submit" class="btn btn-primary btn-sm" style="flex:1">Guardar</button>
+                </div>
+              </form>
+            }
+          </div>
+          
+          @if (!isEditing) {
+            <button class="btn-card-action" (click)="toggleEdit()">Editar datos</button>
+          }
+        </section>
+      </div>
+    } @else {
+      <div class="container" style="padding: 6rem 2rem; text-align: center; color: var(--muted-foreground)">
+        <h3>Cargando información del perfil...</h3>
+      </div>
+    }
   </main>
 
   <app-footer />

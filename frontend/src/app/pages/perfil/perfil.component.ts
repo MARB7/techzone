@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,16 @@ export class PerfilComponent implements OnInit {
   avatarPreview?: string;
 
   constructor(public auth: AuthService, private router: Router) {
-    if (!auth.user()) this.router.navigate(['/']);
+    effect(() => {
+      if (!this.auth.token()) {
+        this.router.navigate(['/']);
+      }
+      
+      const u = this.auth.user();
+      if (u) {
+        this.initEditData();
+      }
+    });
   }
 
   ngOnInit() {

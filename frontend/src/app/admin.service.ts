@@ -3,11 +3,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Producto } from './producto.service';
 import { User } from './auth.service';
+import { API_BASE_URL } from './config';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
-  private PRODUCTOS_URL = 'http://localhost:8000/api/productos/';
-  private USUARIOS_URL = 'http://localhost:8000/api/usuarios/';
+  private PRODUCTOS_URL = `${API_BASE_URL}/api/productos/`;
+  private USUARIOS_URL = `${API_BASE_URL}/api/usuarios/`;
 
   constructor(private http: HttpClient) {}
 
