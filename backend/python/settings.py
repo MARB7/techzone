@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,9 +27,7 @@ SECRET_KEY = 'django-insecure-$+$vvepbdfsy@4%6jy4pstove9nqt&9&5%vp!=8&(cr)1hgp%k
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "20.151.88.18",
+    "*",  # Allow all hosts for Azure deployment, or specify Azure domain here
 ]
 
 
@@ -85,11 +84,11 @@ WSGI_APPLICATION = 'python.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bases_1',
-        'USER': 'maicol',
-        'PASSWORD': 'sapoperro08.',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME', 'bases_1'),
+        'USER': os.environ.get('DB_USER', 'maicol'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'sapoperro08.'),
+        'HOST': os.environ.get('DB_HOST', 'tu-servidor-azure-db.postgres.database.azure.com'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
         'OPTIONS': {
             'client_encoding': 'UTF8',
         }
@@ -139,13 +138,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
-    "http://127.0.0.1:4200",
-    "http://20.151.88.18",
-    "https://20.151.88.18",
-    "http://20.151.88.18:4200",
-]
+CORS_ALLOW_ALL_ORIGINS = True # Allow all origins for Azure, or restrict to specific domains later.
+# CORS_ALLOWED_ORIGINS = [
+#     "http://20.151.88.18",
+#     "https://20.151.88.18",
+#     "http://20.151.88.18:4200",
+# ]
 
 # REST Framework Configuration
 REST_FRAMEWORK = {

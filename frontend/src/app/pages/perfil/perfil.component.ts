@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../auth.service';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { FooterComponent } from '../../footer/footer.component';
+import { API_BASE_URL } from '../../config';
 
 @Component({
   selector: 'app-perfil',
@@ -64,7 +65,7 @@ export class PerfilComponent implements OnInit {
   get userAvatar(): string {
     if (this.user?.perfil?.avatar) {
       const url = this.user.perfil.avatar;
-      return url.startsWith('http') ? url : `http://localhost:8000${url}`;
+      return url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
     }
     const name = this.userDisplayName || 'U';
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2dd4a8&color=0a0a0a&bold=true&size=128`;

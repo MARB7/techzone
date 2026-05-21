@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Producto } from './producto.service';
+import { API_BASE_URL } from './config';
 
 export interface CartItem {
   producto: Producto;
@@ -10,7 +11,7 @@ export interface CartItem {
 @Injectable({ providedIn: 'root' })
 export class CartService {
   private http = inject(HttpClient);
-  private API_URL = 'http://localhost:8000/api/productos/';
+  private API_URL = `${API_BASE_URL}/api/productos/`;
 
   private items = signal<CartItem[]>(this.loadFromStorage());
 
